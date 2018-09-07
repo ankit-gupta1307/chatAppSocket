@@ -10,5 +10,15 @@ socket.on('newMessage', function(data) {
 
 socket.on('disconnect', function(data) {
 	console.log('disconnected')
-	})
+})
+
+socket.on('joininMessage', function(data) {
+	console.log('data')
+})
+
+// socket.broadcast.on('newUser', function(data) {
+// 	console.log('data')
+// })
+
+
 
