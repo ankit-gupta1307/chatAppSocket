@@ -9,7 +9,7 @@ var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
 app.use(express.static(publicPath));
-
+var {generateMessage} = require('./utils/message');
 
 
 // app.get('/', (req, res) => {
@@ -17,30 +17,14 @@ app.use(express.static(publicPath));
 // })
 
 io.on('connection', (socket) => {
-	socket.emit('newMessage', {
-		from: 'Admin',
-		text: 'Welcome Ankit',
-		createdAt: new Date().getTime()
-	})
+	socket.emit('newMessage', generateMessage('Admin', 'Welcome Ankit'))
 
-	socket.broadcast.emit('newMessage', {
-		text: 'Ankit joined the group',
-		from: 'Admin',
-		createdAt: new Date().getTime()
-	})
+	socket.broadcast.emit('newMessage',generateMessage('Admin', 'Ankit joined the group'))
 
-	socket.on('createMessage', function(data) {
+	socket.on('createMessage', (data, callback) => {
 		console.log('show Data', data)
-		// io.emit('newMessage', {
-		// 	from : data.from,
-		// 	text: data.text,
-		// 	createdAt: new Date().getTime()
-		// })
-		socket.broadcast.emit('newMessage', {
-			from : data.from,
-			text: data.text,
-			createdAt: new Date().getTime()
-		})
+		io.emit('newMessage', generateMessage(data.from,  data.text));
+		callback();
 	})
 
 	socket.on('disconnect', function(data) {
