@@ -79,8 +79,9 @@ $("#message-form").on('submit', function(e) {
 	e.preventDefault();
 	var messageTextBox = $('[name=message]');
 	socket.emit('createMessage', {
-		from: 'User',
-		text: messageTextBox.val()
+		from: $.deparam(window.location.search).name,
+		text: messageTextBox.val(),
+		room: $.deparam(window.location.search).room
 	}, function() {
 		messageTextBox.val('');
 	})
@@ -93,9 +94,10 @@ $('#sendLocation').on('click', function() {
 	$('#sendLocation').attr('disabled', 'disabled');
 	navigator.geolocation.getCurrentPosition(function(pos) {
 		$('#sendLocation').removeAttr('disabled');
-	 	socket.emit('locationData', {
+	 	socket.emit('generateLocationMessage', {
 	 		lat: pos.coords.latitude,
-	 		lng: pos.coords.longitude
+	 		lng: pos.coords.longitude,
+	 		room: $.deparam(window.location.search).room
 	 	})
 	}, function(err) {
 		$('#sendLocation').removeAttr('disabled');

@@ -32,7 +32,7 @@ class Users {
 
 	getUserList(room) {
 		var users = this.users.filter((user) => {
-			return user.room == room
+			return user.room== room
 		})
 
 		var namesArray = users.map((user) => {
